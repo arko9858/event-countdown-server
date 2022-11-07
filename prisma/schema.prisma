@@ -1,0 +1,50 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model User {
+  id         String   @id @default(cuid())
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  events      Event[]
+  collections Collection[]
+
+  email        String
+  display_name String
+}
+
+model Event {
+  id         String   @id @default(cuid())
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  user          User       @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  user_id       String
+  collection    Collection @relation(fields: [collection_id], references: [id], onDelete: Cascade)
+  collection_id String
+
+  title String
+  date  DateTime
+}
+
+model Collection {
+  id         String   @id @default(cuid())
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  events Event[]
+
+  user    User   @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  user_id String
+
+  title String
+}
