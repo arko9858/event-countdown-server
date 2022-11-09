@@ -18,8 +18,10 @@ model User {
   events      Event[]
   collections Collection[]
 
-  email        String
+  email String @unique
+
   display_name String
+  password     String
 }
 
 model Event {
