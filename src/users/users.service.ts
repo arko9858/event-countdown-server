@@ -52,4 +52,20 @@ export class UsersService {
       throw err;
     }
   }
+
+  async findUsersById(user_id: string) {
+    try {
+      const user = await this.prisma.user.findUnique({
+        where: { id: user_id },
+      });
+
+      if (!user) {
+        throw new UnauthorizedException("User doesn't exist");
+      }
+
+      return user;
+    } catch (err) {
+      throw err;
+    }
+  }
 }
