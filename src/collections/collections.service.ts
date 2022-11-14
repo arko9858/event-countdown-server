@@ -27,6 +27,12 @@ export class CollectionsService {
 
       const newCollection = await this.prisma.collection.create({
         data: { title, user_id: user.id },
+        select: {
+          id: true,
+          title: true,
+          created_at: true,
+          updated_at: true,
+        },
       });
 
       return newCollection;
@@ -65,7 +71,15 @@ export class CollectionsService {
           title: true,
           created_at: true,
           updated_at: true,
-          events: true,
+          events: {
+            select: {
+              id: true,
+              title: true,
+              date: true,
+              created_at: true,
+              updated_at: true,
+            },
+          },
         },
       });
 
@@ -96,6 +110,12 @@ export class CollectionsService {
       const updatedCollection = await this.prisma.collection.update({
         where: { id: collection.id },
         data: { title },
+        select: {
+          id: true,
+          title: true,
+          created_at: true,
+          updated_at: true,
+        },
       });
       return updatedCollection;
     } catch (err) {
