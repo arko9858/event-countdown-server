@@ -8,9 +8,8 @@ import {
   Delete,
   Request,
 } from '@nestjs/common';
-import { UseGuards } from '@nestjs/common/decorators';
 import { BadRequestException } from '@nestjs/common/exceptions';
-import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
+import { Public } from 'src/auth/decorators/public.guard.decorator';
 import { CollectionsService } from './collections.service';
 import { CreateCollectionDto } from './dto/create-collection.dto';
 import { UpdateCollectionDto } from './dto/update-collection.dto';
@@ -19,7 +18,6 @@ import { UpdateCollectionDto } from './dto/update-collection.dto';
 export class CollectionsController {
   constructor(private readonly collectionsService: CollectionsService) {}
 
-  @UseGuards(JwtAuthGuard)
   @Post()
   create(@Request() req, @Body() createCollectionDto: CreateCollectionDto) {
     const { user_id } = req.user;
@@ -27,7 +25,6 @@ export class CollectionsController {
     return this.collectionsService.create(user_id, createCollectionDto);
   }
 
-  @UseGuards(JwtAuthGuard)
   @Get()
   findAll(@Request() req) {
     const { user_id } = req.user;
@@ -38,12 +35,12 @@ export class CollectionsController {
     return this.collectionsService.findAll(user_id);
   }
 
+  @Public()
   @Get(':id')
   findOne(@Param('id') collection_id: string) {
     return this.collectionsService.findOneById(collection_id);
   }
 
-  @UseGuards(JwtAuthGuard)
   @Patch(':id')
   update(
     @Request() req,
@@ -63,7 +60,6 @@ export class CollectionsController {
     );
   }
 
-  @UseGuards(JwtAuthGuard)
   @Delete(':id')
   remove(@Request() req, @Param('id') collection_id: string) {
     const { user_id } = req.user;
